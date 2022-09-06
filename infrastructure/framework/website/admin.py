@@ -1,3 +1,12 @@
 from django.contrib import admin
 
-# Register your models here.
+from infrastructure.framework.website.models import AwsBucket
+
+
+class AwsBucketAdmin(admin.ModelAdmin):
+    list_display = ("name", "region", "url")
+    search_fields = ("name",)
+    list_filter = ("region",)
+
+
+admin.site.register(AwsBucket, AwsBucketAdmin)
