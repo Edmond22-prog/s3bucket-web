@@ -1,0 +1,24 @@
+{% extends 'website/base.html' %}
+
+{% block content %}
+    <br>
+    <table class="table caption-top">
+        <caption>Result scan of <span>{{ result.name }}</span></caption>
+        <thead class="table-dark">
+        <tr>
+            <th scope="col">Bucket name</th>
+            <th scope="col">Access Browser</th>
+            <th scope="col">Location</th>
+            <th scope="col">Url</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ result.name }}</td>
+            <td>{{ result.access_browser }}</td>
+            <td>{{ result.location }}</td>
+            <td><a target="_blank" href={{ result.url }}>{{ result.url }}</a></td>
+        </tr>
+        </tbody>
+    </table>
+{% endblock %}

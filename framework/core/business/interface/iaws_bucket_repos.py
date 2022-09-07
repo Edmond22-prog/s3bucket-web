@@ -3,7 +3,7 @@ from typing import List
 
 from uuid import UUID
 
-from core.business.interface.ibucket import IBucket
+from framework.core.business.interface.ibucket import IBucket
 
 
 class IAwsBucketRepository(metaclass=abc.ABCMeta):

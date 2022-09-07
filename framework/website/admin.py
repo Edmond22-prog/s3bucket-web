@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from infrastructure.framework.website.models import AwsBucket
+from .models import AwsBucket
 
 
 class AwsBucketAdmin(admin.ModelAdmin):

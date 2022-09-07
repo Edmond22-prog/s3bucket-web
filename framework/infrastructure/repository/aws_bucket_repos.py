@@ -4,7 +4,7 @@ from uuid import UUID
 from core.business.entities import AwsBucketEntity
 from core.business.interface.iaws_bucket import IAwsBucket
 from core.business.interface.iaws_bucket_repos import IAwsBucketRepository
-from infrastructure.framework.website.models import AwsBucket
+from website.models import AwsBucket
 
 
 class AwsBucketRepository(IAwsBucketRepository):

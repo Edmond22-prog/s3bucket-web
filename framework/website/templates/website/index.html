@@ -1,0 +1,19 @@
+{% extends 'website/base.html' %}
+
+{% block content %}
+    <br>
+    <p class="h1 text-center">S3 Bucket Finder</p>
+    <br>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-5 mx-5">
+            <label for="bucketName"></label>
+            <input type="text" id="bucketName" name="bucket" class="form-control form-control-lg"
+                   placeholder="Bucket name" style="width: 50%; margin: 0 auto;">
+        </div>
+        <div class="d-grid gap-2 col-2 mx-auto">
+            <button type="submit" class="btn btn-outline-primary btn-lg">Scrap</button>
+        </div>
+    </form>
+
+{% endblock %}
