@@ -10,6 +10,7 @@
             <th scope="col">Access Browser</th>
             <th scope="col">Location</th>
             <th scope="col">Url</th>
+            <th scope="col">ACL Properties</th>
         </tr>
         </thead>
         <tbody>
@@ -18,6 +19,7 @@
             <td>{{ result.access_browser }}</td>
             <td>{{ result.location }}</td>
             <td><a target="_blank" href={{ result.url }}>{{ result.url }}</a></td>
+            <td>{{ result.properties }}</td>
         </tr>
         </tbody>
     </table>

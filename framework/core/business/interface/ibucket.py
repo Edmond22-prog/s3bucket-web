@@ -23,14 +23,3 @@ class IBucket(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def properties(self) -> dict:
         ...
-
-    # @classmethod
-    # def factory(
-    #         cls,
-    #         name: str,
-    #         url: str,
-    #         location: str,
-    #         properties: dict,
-    #         uuid: Optional[UUID] = None
-    # ) -> "IBucket":
-    #     ...

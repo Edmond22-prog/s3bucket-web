@@ -2,11 +2,11 @@ from dataclasses import dataclass, field
 from typing import Optional, Dict
 from uuid import UUID, uuid4
 
-from core.business.interface.iaws_bucket import IAwsBucket
+from core.business.interface.ibucket import IBucket
 
 
 @dataclass
-class AwsBucketEntity(IAwsBucket):
+class AwsBucketEntity(IBucket):
     _name: str
     _access_browser: str
     _location: str
@@ -34,6 +34,10 @@ class AwsBucketEntity(IAwsBucket):
     def properties(self) -> Optional[Dict]:
         return self._properties
 
+    @properties.setter
+    def properties(self, properties: Dict) -> None:
+        self._properties = properties
+
     @property
     def access_browser(self) -> str:
         return self._access_browser
@@ -47,7 +51,7 @@ class AwsBucketEntity(IAwsBucket):
         location: str,
         properties: Optional[dict] = None,
         uuid: Optional[UUID] = None,
-    ) -> IAwsBucket:
+    ) -> IBucket:
         uuid = uuid or uuid4()
         properties = properties or {}
         obj = cls(

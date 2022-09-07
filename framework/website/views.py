@@ -1,7 +1,10 @@
+import boto3
 from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import TemplateView
 
+from core.business.use_cases.aws_access_acl import AwsAccessAcl
+from core.business.use_cases.aws_settings import AwsSettings
 from core.business.use_cases.scrapping_aws import ScrappingAws
 
 
@@ -14,9 +17,16 @@ class HomeView(View):
 
     def post(self, request, *args, **kwargs):
         bucket_name = request.POST["bucket"]
+
         result = ScrappingAws(bucket_name).run()
         if result is None:
             return redirect("home")
+
+        # Settings ACL Properties to the Bucket
+        settings = AwsSettings()
+        client = boto3.client("s3")
+        AwsAccessAcl(result, client, settings).get_bucket_acl()
+
         context = {"result": result, "navbar": "scan"}
         return render(request, "website/scan_result.html", context)
 
