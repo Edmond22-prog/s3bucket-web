@@ -1,16 +1,14 @@
-import logging
-
 import boto3
 from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import TemplateView
 
 from core.business.entities import AwsBucketEntity
-from core.business.use_cases.aws_access_acl import AwsAccessAcl
-from core.business.use_cases.aws_bucket_manag import AwsBucketManagement
-from core.business.use_cases.aws_settings import AwsSettings
-from core.business.use_cases.scrapping_aws import ScrappingAws
-from infrastructure.repository.aws_bucket_repos import AwsBucketRepository
+from core.business.use_cases.aws.aws_access_acl import AwsAccessAcl
+from core.business.use_cases.aws.aws_bucket_manag import AwsBucketManagement
+from core.business.use_cases.aws.aws_settings import AwsSettings
+from core.business.use_cases.aws.scrapping_aws import ScrappingAws
+from infrastructure.repository.aws.aws_bucket_repos import AwsBucketRepository
 from website.models import AwsBucket
 
 

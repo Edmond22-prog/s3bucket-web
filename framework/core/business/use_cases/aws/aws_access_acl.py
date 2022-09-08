@@ -12,7 +12,7 @@ from botocore.exceptions import ClientError
 
 from core.business.entities import AwsBucketEntity
 from core.business.exceptions import PermissionException, TypeException
-from core.business.use_cases.aws_settings import AwsSettings
+from core.business.use_cases.aws.aws_settings import AwsSettings
 
 REGIONS_NAME = [
     "us-east-2",

@@ -4,7 +4,7 @@ from uuid import UUID
 
 from core.business.interface.ibucket import IBucket
 from core.business.interface.ibucket_use_case import IBucketUseCase
-from infrastructure.repository.aws_bucket_repos import AwsBucketRepository
+from infrastructure.repository.aws.aws_bucket_repos import AwsBucketRepository
 
 
 @dataclass
