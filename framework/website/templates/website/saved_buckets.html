@@ -1,0 +1,28 @@
+{% extends 'website/base.html' %}
+
+{% block content %}
+    <br>
+    <p class="h1 text-center">Saved Buckets</p>
+    <table class="table table-dark table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Bucket name</th>
+            <th scope="col">Access Browser</th>
+            <th scope="col">Location</th>
+            <th scope="col">Url</th>
+            <th scope="col">ACL Properties</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for bucket in buckets %}
+            <tr>
+                <td>{{ bucket.name }}</td>
+                <td>{{ bucket.access_browser }}</td>
+                <td>{{ bucket.location }}</td>
+                <td><a target="_blank" href={{ bucket.url }}>{{ bucket.url }}</a></td>
+                <td>{{ bucket.properties }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}

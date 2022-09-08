@@ -8,6 +8,7 @@ class AwsBucket(models.Model):
     region = models.CharField(max_length=10)
     url = models.CharField(max_length=255, blank=False, null=False)
     access_browser = models.CharField(max_length=10, blank=False, null=False)
+    properties = models.JSONField(blank=True, null=True)
 
     def __str__(self):
         return self.name

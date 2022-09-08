@@ -131,3 +131,4 @@ dmypy.json
 # Other
 .idea/
 .pre-commit-config.yaml
+migrations/

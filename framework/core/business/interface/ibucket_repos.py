@@ -3,10 +3,10 @@ from typing import List
 
 from uuid import UUID
 
-from framework.core.business.interface.ibucket import IBucket
+from core.business.interface.ibucket import IBucket
 
 
-class IAwsBucketRepository(metaclass=abc.ABCMeta):
+class IBucketRepository(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def find(self, uuid: UUID) -> IBucket:
         ...
@@ -25,4 +25,8 @@ class IAwsBucketRepository(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def delete(self, uuid: UUID) -> None:
+        ...
+
+    @abc.abstractmethod
+    def update(self, name: UUID) -> None:
         ...
