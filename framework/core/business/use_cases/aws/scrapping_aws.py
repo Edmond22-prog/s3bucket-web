@@ -1,5 +1,5 @@
 import logging
-from typing import Any
+from typing import Any, Optional
 
 import requests
 import xmltodict
@@ -14,10 +14,24 @@ logging.basicConfig(format="[%(levelname)s] %(message)s", level=logging.INFO)
 
 
 class ScrappingAws(IScrapping):
-    def __init__(self, bucket_name: str):
-        self._bucket_name = bucket_name
+    def __init__(self, value: str):
+        self._bucket_name: Optional[str] = None
+        self._clean_value(value)
+
+    def _clean_value(self, value: str) -> None:
+        if value.startswith("http://") or value.startswith("https://"):
+            values = value.split("//")
+            if values[1].endswith(".amazonaws.com"):
+                rest = values[1].rstrip(".amazonaws.com")
+                self._bucket_name = rest.split(".s3")[0]
+
+        else:
+            self._bucket_name = value
 
     def run(self) -> IBucket:
+        if self._bucket_name is None:
+            return None
+
         try:
             response = requests.get(f"https://{self._bucket_name}.s3.amazonaws.com")
 

@@ -9,7 +9,13 @@
         <div class="mb-5 mx-5">
             <label for="bucketName"></label>
             <input type="text" id="bucketName" name="bucket_name" class="form-control form-control-lg"
-                   placeholder="Bucket name" style="width: 50%; margin: 0 auto;">
+                   placeholder="Bucket name or Url : (http/https)://test.s3.amazonaws.com"
+                   style="width: 50%; margin: 0 auto;">
+            {% if message %}
+            <p class="text-center" style="color: red">
+                {{ message }}
+            </p>
+        {% endif %}
         </div>
         <div class="d-grid gap-2 col-2 mx-auto">
             <button type="submit" class="btn btn-outline-primary btn-lg">Scrap</button>

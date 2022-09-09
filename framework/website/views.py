@@ -1,3 +1,5 @@
+import logging
+
 import boto3
 from django.shortcuts import render, redirect
 from django.views import View
@@ -21,11 +23,12 @@ class HomeView(View):
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
-        bucket_name = request.POST["bucket_name"]
+        value = request.POST["bucket_name"]
 
-        result = ScrappingAws(bucket_name).run()
+        result = ScrappingAws(value).run()
         if result is None:
-            return redirect("home")
+            context = {"message": "Invalid bucket name or url."}
+            return render(request, self.template_name, context)
 
         # Settings ACL Properties to the Bucket
         client = boto3.client("s3")
