@@ -10,7 +10,7 @@
             <th scope="col">Access Browser</th>
             <th scope="col">Location</th>
             <th scope="col">Url</th>
-            <th scope="col">ACL Properties</th>
+{#            <th scope="col">ACL Properties</th>#}
         </tr>
         </thead>
         <tbody>
@@ -20,7 +20,7 @@
                 <td>{{ bucket.access_browser }}</td>
                 <td>{{ bucket.location }}</td>
                 <td><a target="_blank" href={{ bucket.url }}>{{ bucket.url }}</a></td>
-                <td>{{ bucket.properties }}</td>
+{#                <td>{{ bucket.properties }}</td>#}
             </tr>
         {% endfor %}
     </table>

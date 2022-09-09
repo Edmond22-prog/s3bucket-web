@@ -16,7 +16,7 @@ from website.models import AwsBucket
 
 class HomeView(View):
     template_name = "website/index.html"
-    settings = AwsSettings()
+    # settings = AwsSettings()
 
     def get(self, request, *args, **kwargs):
         context = {"navbar": "home"}
@@ -30,9 +30,9 @@ class HomeView(View):
             context = {"message": "Invalid bucket name or url."}
             return render(request, self.template_name, context)
 
-        # Settings ACL Properties to the Bucket
-        client = boto3.client("s3")
-        AwsAccessAcl(result, client, self.settings).get_bucket_acl()
+        # # Settings ACL Properties to the Bucket
+        # client = boto3.client("s3")
+        # AwsAccessAcl(result, client, self.settings).get_bucket_acl()
 
         context = {"result": result, "navbar": "scan"}
         return render(request, "website/scan_result.html", context)
@@ -48,7 +48,7 @@ class ScanResultView(View):
             access_browser=request.POST["bucket_access_browser"],
             location=request.POST["bucket_location"],
             url=request.POST["bucket_url"],
-            properties=request.POST["bucket_properties"],
+            # properties=request.POST["bucket_properties"],
             uuid=request.POST["bucket_id"],
         )
 

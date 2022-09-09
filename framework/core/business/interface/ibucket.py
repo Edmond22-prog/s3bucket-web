@@ -20,6 +20,6 @@ class IBucket(metaclass=abc.ABCMeta):
     def location(self) -> str:
         ...
 
-    @abc.abstractmethod
-    def properties(self) -> dict:
-        ...
+    # @abc.abstractmethod
+    # def properties(self) -> dict:
+    #     ...

@@ -26,7 +26,7 @@ class AwsBucketRepository(IBucketRepository):
             region=bucket.location,
             url=bucket.url,
             access_browser=bucket.access_browser,
-            properties=bucket.properties,
+            # properties=bucket.properties,
         )
 
     def list(self) -> List[IBucket]:
@@ -39,7 +39,7 @@ class AwsBucketRepository(IBucketRepository):
     def update(self, bucket: IBucket) -> None:
         obj = self._model.objects.get(name=bucket.name())
         obj.access_browser = bucket.access_browser()
-        obj.properties = bucket.properties()
+        # obj.properties = bucket.properties()
         obj.save()
 
     @staticmethod
@@ -50,5 +50,5 @@ class AwsBucketRepository(IBucketRepository):
             url=instance.url,
             location=instance.region,
             uuid=instance.uuid,
-            properties=instance.properties,
+            # properties=instance.properties,
         )
