@@ -4,18 +4,41 @@
     <br>
     <p class="h1 text-center">S3 Bucket Finder</p>
     <br>
-    <form method="POST">
+    <form method="POST" action={% url 'scan' %}>
         {% csrf_token %}
         <div class="mb-5 mx-5">
-            <label for="bucketName"></label>
-            <input type="text" id="bucketName" name="bucket_name" class="form-control form-control-lg"
+            <input type="text" name="object" class="form-control form-control-lg"
                    placeholder="Bucket name or Url : (http/https)://test.s3.amazonaws.com"
                    style="width: 50%; margin: 0 auto;">
             {% if message %}
-            <p class="text-center" style="color: red">
-                {{ message }}
-            </p>
-        {% endif %}
+                <p class="text-center" style="color: red">
+                    {{ message }}
+                </p>
+            {% endif %}
+        </div>
+        <div class="d-grid gap-2 col-2 mx-auto">
+            <button type="submit" class="btn btn-outline-primary btn-lg">Scrap</button>
+        </div>
+    </form>
+    <br><br><br>
+    <div class="position-absolute top-95 start-50 translate-middle">
+        <p class="text-center h6 text-muted fw-light text-wrap" style="width: 30rem;">To scrape bucket names or urls
+            from your file, each line of
+            your file would
+            have to represent a name or an url.
+            The respect of this rule is essential for a good result.</p>
+    </div>
+    <br><br>
+    <form enctype="multipart/form-data" method="POST" action={% url 'scan_file' %}>
+        {% csrf_token %}
+        <div class="mb-5 mx-5">
+            <input type="file" accept=".txt" name="object_file" class="form-control form-control-lg"
+                   style="width: 50%; margin: 0 auto;">
+            {% if message %}
+                <p class="text-center" style="color: red">
+                    {{ message }}
+                </p>
+            {% endif %}
         </div>
         <div class="d-grid gap-2 col-2 mx-auto">
             <button type="submit" class="btn btn-outline-primary btn-lg">Scrap</button>

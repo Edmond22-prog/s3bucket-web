@@ -14,28 +14,79 @@ from infrastructure.repository.aws.aws_bucket_repos import AwsBucketRepository
 from website.models import AwsBucket
 
 
-class HomeView(View):
+# class HomeView(View):
+#     template_name = "website/index.html"
+#     # settings = AwsSettings()
+#
+#     def get(self, request, *args, **kwargs):
+#         context = {"navbar": "home"}
+#         return render(request, self.template_name, context)
+#
+#     def post(self, request, *args, **kwargs):
+#         value = request.POST["bucket_name"]
+#
+#         result = ScrappingAws(value).run()
+#         if result is None:
+#             context = {"message": "Invalid bucket name or url."}
+#             return render(request, self.template_name, context)
+#
+#         # # Settings ACL Properties to the Bucket
+#         # client = boto3.client("s3")
+#         # AwsAccessAcl(result, client, self.settings).get_bucket_acl()
+#
+#         context = {"result": result, "navbar": "scan"}
+#         return render(request, "website/scan_result.html", context)
+
+
+def home(request):
     template_name = "website/index.html"
-    # settings = AwsSettings()
+    return render(request, template_name, {"navbar": "home"})
 
-    def get(self, request, *args, **kwargs):
-        context = {"navbar": "home"}
-        return render(request, self.template_name, context)
 
-    def post(self, request, *args, **kwargs):
-        value = request.POST["bucket_name"]
-
+def scan(request):
+    template_name = "website/scan_result.html"
+    if request.method == "POST":
+        value = request.POST["object"]
         result = ScrappingAws(value).run()
         if result is None:
-            context = {"message": "Invalid bucket name or url."}
-            return render(request, self.template_name, context)
-
-        # # Settings ACL Properties to the Bucket
-        # client = boto3.client("s3")
-        # AwsAccessAcl(result, client, self.settings).get_bucket_acl()
+            context = {"message": "Invalid bucket name/url or bucket doesn't exist."}
+            return render(request, "website/index.html", context)
 
         context = {"result": result, "navbar": "scan"}
-        return render(request, "website/scan_result.html", context)
+        return render(request, template_name, context)
+
+
+def scan_file(request):
+    # template_name = "website/scan_result.html"
+    if request.method == "POST":
+        file = request.FILES["object_file"]
+        logging.info(type(file))
+
+        # Open the file <upload_file_copy.txt> and write all data who
+        # are contained in the uploaded file
+        with open("website/file/upload_file_copy.txt", "wb+") as destination:
+            for chunk in file.chunks():
+                destination.write(chunk)
+
+        buckets = []
+        not_exists = []
+        with open("website/file/upload_file_copy.txt", "r") as f:
+            for bucket in f.readlines():
+                bucket = bucket.rstrip("\n")
+                result = ScrappingAws(bucket).run()
+                if result is None:
+                    not_exists.append(bucket)
+
+                else:
+                    buckets.append(result)
+
+        context = {"buckets": buckets, "navbar": "scan"}
+        if not_exists:
+            context["not_exists"] = not_exists
+
+        logging.info(buckets)
+        logging.info(not_exists)
+        redirect("scan_file")
 
 
 class ScanResultView(View):

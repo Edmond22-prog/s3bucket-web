@@ -60,6 +60,7 @@ class ScrappingAws(IScrapping):
                 f"bucket <{self._bucket_name}> (status=301)."
                 f"Check your connexion and restart."
             )
+            return None
 
         except HTTPError:
             logging.warning(
@@ -67,6 +68,7 @@ class ScrappingAws(IScrapping):
                 f"bucket <{self._bucket_name}> (status=301)."
                 f"Check your connexion and restart."
             )
+            return None
 
         except Timeout:
             logging.warning(
@@ -74,6 +76,7 @@ class ScrappingAws(IScrapping):
                 f"bucket <{self._bucket_name}> (status=301)."
                 f"Check your connexion and restart."
             )
+            return None
 
         except RequestException:
             logging.warning(
@@ -81,6 +84,7 @@ class ScrappingAws(IScrapping):
                 f"bucket <{self._bucket_name}> (status=301)."
                 f"Check your connexion and restart."
             )
+            return None
 
     def _is_status_200(self, location: str, endpoint: str) -> IBucket:
         bucket = AwsBucketEntity.factory(self._bucket_name, "Public", endpoint, location)
