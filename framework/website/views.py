@@ -1,18 +1,10 @@
-import logging
 import os
 
 import boto3
-from django.shortcuts import render, redirect
-from django.views import View
-from django.views.generic import TemplateView
+from django.shortcuts import render
 
-from core.business.entities import AwsBucketEntity
 from core.business.use_cases.aws.aws_access_acl import AwsAccessAcl
-from core.business.use_cases.aws.aws_bucket_manag import AwsBucketManagement
-from core.business.use_cases.aws.aws_settings import AwsSettings
 from core.business.use_cases.aws.scrapping_aws import ScrappingAws
-from infrastructure.repository.aws.aws_bucket_repos import AwsBucketRepository
-from website.models import AwsBucket
 
 
 # class HomeView(View):
@@ -53,6 +45,11 @@ def scan(request):
             context = {"message": "Invalid bucket name/url or bucket doesn't exist."}
             return render(request, "website/index.html", context)
 
+        if result.access_browser == "Public":
+            # Settings ACL Properties to the Public Bucket
+            client = boto3.client("s3")
+            AwsAccessAcl(result, client).get_bucket_acl()
+
         context = {"result": result, "navbar": "scan"}
         return render(request, template_name, context)
 
@@ -64,7 +61,8 @@ def scan_file(request):
         file_name = str(file)
 
         # Local file creation
-        os.chdir("website/file")
+        location = os.path.join(os.getcwd(), "website/file")
+        os.chdir(location)
         open(file_name, "w").close()
 
         # Open the local file and write all data who
@@ -76,6 +74,7 @@ def scan_file(request):
         # Verify if the file is empty
         if os.stat(file_name).st_size == 0:
             context = {"message_for_file": "The file is empty."}
+            os.remove(file_name)
             return render(request, "website/index.html", context)
 
         buckets = []
@@ -88,6 +87,10 @@ def scan_file(request):
                     not_exists.append(bucket)
 
                 else:
+                    if result.access_browser == "Public":
+                        # Settings ACL Properties to the Public Bucket
+                        client = boto3.client("s3")
+                        AwsAccessAcl(result, client).get_bucket_acl()
                     buckets.append(result)
 
         # Delete the local file
@@ -98,42 +101,3 @@ def scan_file(request):
             context["not_exists"] = not_exists
 
         return render(request, template_name, context)
-
-
-class ScanResultView(View):
-    template_name = "website/scan_result.html"
-    aws_bucket_repos = AwsBucketRepository(AwsBucket)
-
-    def post(self, request, *args, **kwargs):
-        bucket = AwsBucketEntity.factory(
-            name=request.POST["bucket_name"],
-            access_browser=request.POST["bucket_access_browser"],
-            location=request.POST["bucket_location"],
-            url=request.POST["bucket_url"],
-            # properties=request.POST["bucket_properties"],
-            uuid=request.POST["bucket_id"],
-        )
-
-        aws_bucket_manage = AwsBucketManagement(self.aws_bucket_repos)
-        try:
-            # Try to get the bucket if exist
-            bucket = aws_bucket_manage.find_bucket_by_name(bucket.name())
-            # Update the bucket information
-            aws_bucket_manage.update_bucket(bucket)
-
-        except TypeError:
-            # Create the bucket in the database
-            aws_bucket_manage.create_bucket(bucket)
-
-        return redirect("saved_buckets")
-
-
-class SavedBucketsView(TemplateView):
-    template_name = "website/saved_buckets.html"
-    aws_bucket_repos = AwsBucketRepository(AwsBucket)
-
-    def get(self, request, *args, **kwargs):
-        aws_bucket_manage = AwsBucketManagement(self.aws_bucket_repos)
-        buckets = aws_bucket_manage.list_buckets()
-        context = {"navbar": "saved_buckets", "buckets": buckets}
-        return render(request, self.template_name, context)

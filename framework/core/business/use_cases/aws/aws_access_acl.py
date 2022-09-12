@@ -5,14 +5,15 @@
 """
 
 import logging
+import os
 from typing import Optional
 
+import environ
 from botocore.client import BaseClient
 from botocore.exceptions import ClientError
 
 from core.business.entities import AwsBucketEntity
 from core.business.exceptions import PermissionException, TypeException
-from core.business.use_cases.aws.aws_settings import AwsSettings
 
 REGIONS_NAME = [
     "us-east-2",
@@ -37,19 +38,22 @@ REGIONS_NAME = [
     "sa-east-1",
 ]
 
+env = environ.Env()
+environ.Env.read_env()
+
 
 class AwsAccessAcl(object):
-    def __init__(self, bucket: AwsBucketEntity, client: BaseClient, settings: AwsSettings):
+    def __init__(self, bucket: AwsBucketEntity, client: BaseClient):
         self._bucket = bucket
-        self._aws_settings = settings
+        # self._aws_settings = settings
         self._aws_client = client
-        self._indice_region = -1
-        self._initial_region = settings.get_region()
+        # self._indice_region = -1
+        # self._initial_region = env("AWS_DEFAULT_REGION")
 
     def __exit__(self, exception_type, exception_value, traceback):
-        self._aws_settings.set_config(self._initial_region)
+        os.environ.pop("AWS_DEFAULT_REGION")
 
-    def get_bucket_acl(self, region="us-east-1") -> AwsBucketEntity:
+    def get_bucket_acl(self, indice_region=-1) -> AwsBucketEntity:
         try:
             responses_of_read_acl = self._check_read_acl_permissions(self._bucket)
             if responses_of_read_acl is not None:
@@ -67,10 +71,10 @@ class AwsAccessAcl(object):
                 else:
                     # If the access it is not allow or denied
                     # Then  the region  is not good, and we change it
-                    self._indice_region += 1
-                    if self._indice_region <= len(REGIONS_NAME) - 1:
-                        self._aws_settings.set_config(REGIONS_NAME[self._indice_region])
-                        self.get_bucket_acl(region)
+                    indice_region += 1
+                    if indice_region <= len(REGIONS_NAME) - 1:
+                        os.environ["AWS_DEFAULT_REGION"] = REGIONS_NAME[indice_region]
+                        self.get_bucket_acl(indice_region)
 
         except ClientError as aws_error:
             logging.error(aws_error)

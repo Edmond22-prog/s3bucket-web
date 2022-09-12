@@ -11,7 +11,7 @@ class AwsBucketEntity(IBucket):
     _access_browser: str
     _location: str
     _url: str
-    # _properties: Dict = field(default_factory=dict)
+    _properties: Dict = field(default_factory=dict)
     _uuid: UUID = field(default=uuid4())
 
     @property
@@ -30,13 +30,13 @@ class AwsBucketEntity(IBucket):
     def location(self) -> str:
         return self._location
 
-    # @property
-    # def properties(self) -> Optional[Dict]:
-    #     return self._properties
-    #
-    # @properties.setter
-    # def properties(self, properties: Dict) -> None:
-    #     self._properties = properties
+    @property
+    def properties(self) -> Optional[Dict]:
+        return self._properties
+
+    @properties.setter
+    def properties(self, properties: Dict) -> None:
+        self._properties = properties
 
     @property
     def access_browser(self) -> str:

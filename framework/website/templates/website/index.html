@@ -34,14 +34,14 @@
         <div class="mb-5 mx-5">
             <input type="file" accept=".txt" name="object_file" class="form-control form-control-lg"
                    style="width: 50%; margin: 0 auto;">
-            {% if message %}
+            {% if message_for_file %}
                 <p class="text-center" style="color: red">
-                    {{ message }}
+                    {{ message_for_file }}
                 </p>
             {% endif %}
         </div>
         <div class="d-grid gap-2 col-2 mx-auto">
-            <button type="submit" class="btn btn-outline-primary btn-lg">Scrap</button>
+            <button type="submit" class="btn btn-outline-primary btn-lg">Scrap File</button>
         </div>
     </form>
 

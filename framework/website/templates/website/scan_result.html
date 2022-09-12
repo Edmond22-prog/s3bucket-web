@@ -1,5 +1,9 @@
 {% extends 'website/base.html' %}
 
+{% block title %}
+    S3 Bucket Finder - Scan Result
+{% endblock %}
+
 {% block content %}
     {% if buckets %}
         <br>
@@ -11,8 +15,7 @@
                 <th scope="col">Access Browser</th>
                 <th scope="col">Location</th>
                 <th scope="col">Url</th>
-                {#            <th scope="col">ACL Properties</th>#}
-                <th scope="col">Action</th>
+                <th scope="col">ACL Properties</th>
             </tr>
             </thead>
             <tbody>
@@ -22,20 +25,14 @@
                     <td>{{ bucket.access_browser }}</td>
                     <td>{{ bucket.location }}</td>
                     <td><a target="_blank" href={{ bucket.url }}>{{ bucket.url }}</a></td>
-                    <td>
-                        <form method="POST" action={% url 'saving_bucket' %}>
-                            {% csrf_token %}
-                            <input type="hidden" name="bucket_id" value="{{ result.uuid }}">
-                            <input type="hidden" name="bucket_name" value="{{ result.name }}">
-                            <input type="hidden" name="bucket_access_browser" value="{{ result.access_browser }}">
-                            <input type="hidden" name="bucket_location" value="{{ result.location }}">
-                            <input type="hidden" name="bucket_url" value="{{ result.url }}">
-                            {#                    <input type="hidden" name="bucket_properties" value="{{ result.properties }}">#}
-                            <input class="btn btn-success" type="submit" value="Save">
-                        </form>
-                    </td>
+                    {% if bucket.access_browser == "Public" %}
+                        <td>{{ bucket.properties }}</td>
+                    {% else %}
+                        <td>...</td>
+                    {% endif %}
                 </tr>
             {% endfor %}
+
             {% if not_exists %}
                 {% for name in not_exists %}
                     <tr>
@@ -60,8 +57,7 @@
                 <th scope="col">Access Browser</th>
                 <th scope="col">Location</th>
                 <th scope="col">Url</th>
-                {#            <th scope="col">ACL Properties</th>#}
-                <th scope="col">Action</th>
+                <th scope="col">ACL Properties</th>
             </tr>
             </thead>
             <tbody>
@@ -70,19 +66,11 @@
                 <td>{{ result.access_browser }}</td>
                 <td>{{ result.location }}</td>
                 <td><a target="_blank" href={{ result.url }}>{{ result.url }}</a></td>
-                {#            <td>{{ result.properties }}</td>#}
-                <td>
-                    <form method="POST" action={% url 'saving_bucket' %}>
-                        {% csrf_token %}
-                        <input type="hidden" name="bucket_id" value="{{ result.uuid }}">
-                        <input type="hidden" name="bucket_name" value="{{ result.name }}">
-                        <input type="hidden" name="bucket_access_browser" value="{{ result.access_browser }}">
-                        <input type="hidden" name="bucket_location" value="{{ result.location }}">
-                        <input type="hidden" name="bucket_url" value="{{ result.url }}">
-                        {#                    <input type="hidden" name="bucket_properties" value="{{ result.properties }}">#}
-                        <input class="btn btn-success" type="submit" value="Save">
-                    </form>
-                </td>
+                {% if result.access_browser == "Public" %}
+                    <td>{{ result.properties }}</td>
+                {% else %}
+                    <td>...</td>
+                {% endif %}
             </tr>
             </tbody>
         </table>
