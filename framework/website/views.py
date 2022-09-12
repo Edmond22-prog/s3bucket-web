@@ -1,4 +1,5 @@
 import logging
+import os
 
 import boto3
 from django.shortcuts import render, redirect
@@ -57,20 +58,29 @@ def scan(request):
 
 
 def scan_file(request):
-    # template_name = "website/scan_result.html"
+    template_name = "website/scan_result.html"
     if request.method == "POST":
         file = request.FILES["object_file"]
-        logging.info(type(file))
+        file_name = str(file)
 
-        # Open the file <upload_file_copy.txt> and write all data who
+        # Local file creation
+        os.chdir("website/file")
+        open(file_name, "w").close()
+
+        # Open the local file and write all data who
         # are contained in the uploaded file
-        with open("website/file/upload_file_copy.txt", "wb+") as destination:
+        with open(file_name, "wb+") as destination:
             for chunk in file.chunks():
                 destination.write(chunk)
 
+        # Verify if the file is empty
+        if os.stat(file_name).st_size == 0:
+            context = {"message_for_file": "The file is empty."}
+            return render(request, "website/index.html", context)
+
         buckets = []
         not_exists = []
-        with open("website/file/upload_file_copy.txt", "r") as f:
+        with open(file_name, "r") as f:
             for bucket in f.readlines():
                 bucket = bucket.rstrip("\n")
                 result = ScrappingAws(bucket).run()
@@ -80,13 +90,14 @@ def scan_file(request):
                 else:
                     buckets.append(result)
 
-        context = {"buckets": buckets, "navbar": "scan"}
+        # Delete the local file
+        os.remove(file_name)
+
+        context = {"buckets": buckets, "navbar": "scan", "file_name": file_name}
         if not_exists:
             context["not_exists"] = not_exists
 
-        logging.info(buckets)
-        logging.info(not_exists)
-        redirect("scan_file")
+        return render(request, template_name, context)
 
 
 class ScanResultView(View):

@@ -1,39 +1,91 @@
 {% extends 'website/base.html' %}
 
 {% block content %}
-    <br>
-    <table class="table caption-top">
-        <caption>Result scan of <span>{{ result.name }}</span></caption>
-        <thead class="table-dark">
-        <tr>
-            <th scope="col">Bucket name</th>
-            <th scope="col">Access Browser</th>
-            <th scope="col">Location</th>
-            <th scope="col">Url</th>
-{#            <th scope="col">ACL Properties</th>#}
-            <th scope="col">Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>{{ result.name }}</td>
-            <td>{{ result.access_browser }}</td>
-            <td>{{ result.location }}</td>
-            <td><a target="_blank" href={{ result.url }}>{{ result.url }}</a></td>
-{#            <td>{{ result.properties }}</td>#}
-            <td>
-                <form method="POST" action={% url 'saving_bucket' %}>
-                    {% csrf_token %}
-                    <input type="hidden" name="bucket_id" value="{{ result.uuid }}">
-                    <input type="hidden" name="bucket_name" value="{{ result.name }}">
-                    <input type="hidden" name="bucket_access_browser" value="{{ result.access_browser }}">
-                    <input type="hidden" name="bucket_location" value="{{ result.location }}">
-                    <input type="hidden" name="bucket_url" value="{{ result.url }}">
-{#                    <input type="hidden" name="bucket_properties" value="{{ result.properties }}">#}
-                    <input class="btn btn-success" type="submit" value="Save">
-                </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    {% if buckets %}
+        <br>
+        <table class="table caption-top">
+            <caption>Result scan of the file <span>{{ file_name }}</span></caption>
+            <thead class="table-dark">
+            <tr>
+                <th scope="col">Bucket name</th>
+                <th scope="col">Access Browser</th>
+                <th scope="col">Location</th>
+                <th scope="col">Url</th>
+                {#            <th scope="col">ACL Properties</th>#}
+                <th scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for bucket in buckets %}
+                <tr>
+                    <td>{{ bucket.name }}</td>
+                    <td>{{ bucket.access_browser }}</td>
+                    <td>{{ bucket.location }}</td>
+                    <td><a target="_blank" href={{ bucket.url }}>{{ bucket.url }}</a></td>
+                    <td>
+                        <form method="POST" action={% url 'saving_bucket' %}>
+                            {% csrf_token %}
+                            <input type="hidden" name="bucket_id" value="{{ result.uuid }}">
+                            <input type="hidden" name="bucket_name" value="{{ result.name }}">
+                            <input type="hidden" name="bucket_access_browser" value="{{ result.access_browser }}">
+                            <input type="hidden" name="bucket_location" value="{{ result.location }}">
+                            <input type="hidden" name="bucket_url" value="{{ result.url }}">
+                            {#                    <input type="hidden" name="bucket_properties" value="{{ result.properties }}">#}
+                            <input class="btn btn-success" type="submit" value="Save">
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            {% if not_exists %}
+                {% for name in not_exists %}
+                    <tr>
+                        <td>{{ name }}</td>
+                        <td>None</td>
+                        <td>None</td>
+                        <td>None</td>
+                        <td>Invalid or non-existent bucket.</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
+
+    {% else %}
+        <br>
+        <table class="table caption-top">
+            <caption>Result scan of <span>{{ result.name }}</span></caption>
+            <thead class="table-dark">
+            <tr>
+                <th scope="col">Bucket name</th>
+                <th scope="col">Access Browser</th>
+                <th scope="col">Location</th>
+                <th scope="col">Url</th>
+                {#            <th scope="col">ACL Properties</th>#}
+                <th scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ result.name }}</td>
+                <td>{{ result.access_browser }}</td>
+                <td>{{ result.location }}</td>
+                <td><a target="_blank" href={{ result.url }}>{{ result.url }}</a></td>
+                {#            <td>{{ result.properties }}</td>#}
+                <td>
+                    <form method="POST" action={% url 'saving_bucket' %}>
+                        {% csrf_token %}
+                        <input type="hidden" name="bucket_id" value="{{ result.uuid }}">
+                        <input type="hidden" name="bucket_name" value="{{ result.name }}">
+                        <input type="hidden" name="bucket_access_browser" value="{{ result.access_browser }}">
+                        <input type="hidden" name="bucket_location" value="{{ result.location }}">
+                        <input type="hidden" name="bucket_url" value="{{ result.url }}">
+                        {#                    <input type="hidden" name="bucket_properties" value="{{ result.properties }}">#}
+                        <input class="btn btn-success" type="submit" value="Save">
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    {% endif %}
 {% endblock %}
