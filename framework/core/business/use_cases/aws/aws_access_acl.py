@@ -130,12 +130,12 @@ class AwsAccessAcl(object):
     def _bucket_human_read_acl(self, acl_property: dict, access=PermissionException.LIST_BUCKET_RESULT):
         result_permissions = {
             "Owner_ID": "",
-            "private": False,
+            "private-acl": False,
             "public-read": False,
-            "public-read-write": False,
-            "public-write-acp": False,
             "public-write": False,
+            "public-read-write": False,
             "public-read-acp": False,
+            "public-write-acp": False,
             "aws-exec-read": False,
             "authenticated-read": False,
             "log-delivery-write": False,
@@ -143,7 +143,7 @@ class AwsAccessAcl(object):
 
         # Check if the bucket is private
         if len(acl_property["Grants"]) == 1 or access == PermissionException.ACCESS_DENIED:
-            result_permissions["private"] = True
+            result_permissions["private-acl"] = True
             return result_permissions
 
         # For any element in grant, check if bucket acl is

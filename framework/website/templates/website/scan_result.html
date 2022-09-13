@@ -7,7 +7,7 @@
 {% block content %}
     {% if buckets %}
         <br>
-        <table class="table caption-top">
+        <table class="table caption-top table-hover">
             <caption>Result scan of the file <span>{{ file_name }}</span></caption>
             <thead class="table-dark">
             <tr>
@@ -26,7 +26,31 @@
                     <td>{{ bucket.location }}</td>
                     <td><a target="_blank" href={{ bucket.url }}>{{ bucket.url }}</a></td>
                     {% if bucket.access_browser == "Public" %}
-                        <td>{{ bucket.properties }}</td>
+                        <td>
+                            <table class="table table-bordered border-primary">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Owner ID:</th>
+                                    <th scope="col">Private ACL:</th>
+                                    <th scope="col">Public Read:</th>
+                                    <th scope="col">Public Write:</th>
+                                    <th scope="col">Public Read Write:</th>
+                                    <th scope="col">Public Read ACP</th>
+                                    <th scope="col">Public Write ACP</th>
+                                    <th scope="col">AWS Exec Read</th>
+                                    <th scope="col">Authenticated Read</th>
+                                    <th scope="col">Log Delivery Write</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    {% for key, value in bucket.properties.items %}
+                                        <td>{{ value | truncatechars:6 }}</td>
+                                    {% endfor %}
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
                     {% else %}
                         <td>...</td>
                     {% endif %}
@@ -49,7 +73,7 @@
 
     {% else %}
         <br>
-        <table class="table caption-top">
+        <table class="table caption-top table-hover">
             <caption>Result scan of <span>{{ result.name }}</span></caption>
             <thead class="table-dark">
             <tr>
@@ -67,7 +91,31 @@
                 <td>{{ result.location }}</td>
                 <td><a target="_blank" href={{ result.url }}>{{ result.url }}</a></td>
                 {% if result.access_browser == "Public" %}
-                    <td>{{ result.properties }}</td>
+                    <td>
+                        <table class="table table-bordered border-primary">
+                            <thead>
+                            <tr>
+                                <th scope="col">Owner ID:</th>
+                                <th scope="col">Private ACL:</th>
+                                <th scope="col">Public Read:</th>
+                                <th scope="col">Public Write:</th>
+                                <th scope="col">Public Read Write:</th>
+                                <th scope="col">Public Read ACP</th>
+                                <th scope="col">Public Write ACP</th>
+                                <th scope="col">AWS Exec Read</th>
+                                <th scope="col">Authenticated Read</th>
+                                <th scope="col">Log Delivery Write</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                {% for key, value in result.properties.items %}
+                                    <td>{{ value | truncatechars:6 }}</td>
+                                {% endfor %}
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
                 {% else %}
                     <td>...</td>
                 {% endif %}

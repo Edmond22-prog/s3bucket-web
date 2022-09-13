@@ -7,9 +7,9 @@
     <form method="POST" action={% url 'scan' %}>
         {% csrf_token %}
         <div class="mb-5 mx-5">
-            <input type="text" name="object" class="form-control form-control-lg"
+            <input id="input1" type="text" name="object" class="form-control form-control-lg"
                    placeholder="Bucket name or Url : (http/https)://test.s3.amazonaws.com"
-                   style="width: 50%; margin: 0 auto;">
+                   style="width: 50%; margin: 0 auto;" required>
             {% if message %}
                 <p class="text-center" style="color: red">
                     {{ message }}
@@ -17,7 +17,11 @@
             {% endif %}
         </div>
         <div class="d-grid gap-2 col-2 mx-auto">
-            <button type="submit" class="btn btn-outline-primary btn-lg">Scrap</button>
+            <button id="scrap_btn" type="submit" class="btn btn-outline-primary btn-lg">Scrap</button>
+            <button id="loading_btn" class="btn btn-primary" type="button" disabled style="display: none;">
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Wait a moment please...
+            </button>
         </div>
     </form>
     <br><br><br>
@@ -32,8 +36,8 @@
     <form enctype="multipart/form-data" method="POST" action={% url 'scan_file' %}>
         {% csrf_token %}
         <div class="mb-5 mx-5">
-            <input type="file" accept=".txt" name="object_file" class="form-control form-control-lg"
-                   style="width: 50%; margin: 0 auto;">
+            <input id="input2" type="file" accept=".txt" name="object_file" class="form-control form-control-lg"
+                   style="width: 50%; margin: 0 auto;" required>
             {% if message_for_file %}
                 <p class="text-center" style="color: red">
                     {{ message_for_file }}
@@ -41,7 +45,11 @@
             {% endif %}
         </div>
         <div class="d-grid gap-2 col-2 mx-auto">
-            <button type="submit" class="btn btn-outline-primary btn-lg">Scrap File</button>
+            <button id="scrap_file_btn" type="submit" class="btn btn-outline-primary btn-lg">Scrap File</button>
+            <button id="loading_file_btn" class="btn btn-primary" type="button" disabled style="display: none;">
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Wait a moment please...
+            </button>
         </div>
     </form>
 

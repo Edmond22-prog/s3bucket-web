@@ -38,8 +38,10 @@ def home(request):
 
 def scan(request):
     template_name = "website/scan_result.html"
+    context = {"navbar": "scan"}
     if request.method == "POST":
         value = request.POST["object"]
+        context["value"] = value
         result = ScrappingAws(value).run()
         if result is None:
             context = {"message": "Invalid bucket name/url or bucket doesn't exist."}
@@ -50,12 +52,13 @@ def scan(request):
             client = boto3.client("s3")
             AwsAccessAcl(result, client).get_bucket_acl()
 
-        context = {"result": result, "navbar": "scan"}
+        context["result"] = result
         return render(request, template_name, context)
 
 
 def scan_file(request):
     template_name = "website/scan_result.html"
+    context = {"navbar": "scan"}
     if request.method == "POST":
         file = request.FILES["object_file"]
         file_name = str(file)
@@ -75,6 +78,7 @@ def scan_file(request):
         if os.stat(file_name).st_size == 0:
             context = {"message_for_file": "The file is empty."}
             os.remove(file_name)
+            os.chdir(os.path.join(os.getcwd(), "../.."))
             return render(request, "website/index.html", context)
 
         buckets = []
@@ -94,9 +98,12 @@ def scan_file(request):
                     buckets.append(result)
 
         # Delete the local file
-        os.remove(file_name)
+        if os.path.exists(file_name):
+            os.remove(file_name)
+            os.chdir(os.path.join(os.getcwd(), "../.."))
 
-        context = {"buckets": buckets, "navbar": "scan", "file_name": file_name}
+        context["buckets"] = buckets
+        context["file_name"] = file_name
         if not_exists:
             context["not_exists"] = not_exists
 
