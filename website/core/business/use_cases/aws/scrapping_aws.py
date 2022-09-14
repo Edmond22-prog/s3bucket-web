@@ -5,17 +5,16 @@ import requests
 import xmltodict
 from requests import HTTPError, Timeout, RequestException
 
-from core.business.entities import AwsBucketEntity
-from core.business.interface.ibucket import IBucket
-from core.business.interface.iscrapping import IScrapping
-
+from website.core.business.entities import AwsBucketEntity
+from website.core.business.interface.ibucket import IBucket
+from website.core.business.interface.iscrapping import IScrapping
 
 logging.basicConfig(format="[%(levelname)s] %(message)s", level=logging.INFO)
 
 
 class ScrappingAws(IScrapping):
     def __init__(self, value: str):
-        self._bucket_name: Optional[str] = None
+        self._bucket_name = ""
         self._clean_value(value)
 
     def _clean_value(self, value: str) -> None:
@@ -28,7 +27,7 @@ class ScrappingAws(IScrapping):
         else:
             self._bucket_name = value
 
-    def run(self) -> IBucket:
+    def run(self) -> Optional[IBucket]:
         if self._bucket_name is None:
             return None
 
@@ -86,17 +85,23 @@ class ScrappingAws(IScrapping):
             )
             return None
 
+        return None
+
     def _is_status_200(self, location: str, endpoint: str) -> IBucket:
-        bucket = AwsBucketEntity.factory(self._bucket_name, "Public", endpoint, location)
+        bucket = AwsBucketEntity.factory(
+            name=self._bucket_name, access_browser="Public", url=endpoint, location=location
+        )
         logging.info(bucket)
         return bucket
 
     def _is_status_403(self, location: str, endpoint: str) -> IBucket:
-        bucket = AwsBucketEntity.factory(self._bucket_name, "Private", endpoint, location)
+        bucket = AwsBucketEntity.factory(
+            name=self._bucket_name, access_browser="Private", url=endpoint, location=location
+        )
         logging.info(bucket)
         return bucket
 
-    def _is_status_301(self, data: Any) -> IBucket:
+    def _is_status_301(self, data: Any) -> Optional[IBucket]:
         endpoint = data["Error"]["Endpoint"]
         try:
             response = requests.get(f"https://{endpoint}")
@@ -139,7 +144,7 @@ class ScrappingAws(IScrapping):
             )
             return None
 
-    def _is_status_400(self, data: Any) -> IBucket:
+    def _is_status_400(self, data: Any) -> Optional[IBucket]:
         error = data["Error"]
         if error["Code"] == "IllegalLocationConstraintException":
             location = error["Message"].split(" ")[1]

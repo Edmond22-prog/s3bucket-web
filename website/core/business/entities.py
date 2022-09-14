@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from typing import Optional, Dict
 from uuid import UUID, uuid4
 
-from core.business.interface.ibucket import IBucket
+from website.core.business.interface.ibucket import IBucket
 
 
 @dataclass

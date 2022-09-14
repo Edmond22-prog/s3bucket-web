@@ -3,8 +3,8 @@ import os
 import boto3
 from django.shortcuts import render
 
-from core.business.use_cases.aws.aws_access_acl import AwsAccessAcl
-from core.business.use_cases.aws.scrapping_aws import ScrappingAws
+from .core.business.use_cases.aws.aws_access_acl import AwsAccessAcl
+from .core.business.use_cases.aws.scrapping_aws import ScrappingAws
 
 
 # class HomeView(View):
@@ -78,7 +78,7 @@ def scan_file(request):
         if os.stat(file_name).st_size == 0:
             context = {"message_for_file": "The file is empty."}
             os.remove(file_name)
-            os.chdir(os.path.join(os.getcwd(), "../.."))
+            os.chdir(os.path.join(os.getcwd(), ".."))
             return render(request, "website/index.html", context)
 
         buckets = []
@@ -100,7 +100,7 @@ def scan_file(request):
         # Delete the local file
         if os.path.exists(file_name):
             os.remove(file_name)
-            os.chdir(os.path.join(os.getcwd(), "../.."))
+            os.chdir(os.path.join(os.getcwd(), ".."))
 
         context["buckets"] = buckets
         context["file_name"] = file_name

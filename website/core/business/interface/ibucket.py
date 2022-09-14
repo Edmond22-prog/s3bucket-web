@@ -1,5 +1,5 @@
 import abc
-from typing import Optional
+from typing import Optional, Dict
 from uuid import UUID
 
 
@@ -21,5 +21,5 @@ class IBucket(metaclass=abc.ABCMeta):
         ...
 
     @abc.abstractmethod
-    def properties(self) -> dict:
+    def properties(self) -> Optional[Dict]:
         ...

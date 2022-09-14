@@ -2,7 +2,7 @@ import abc
 from typing import List
 from uuid import UUID
 
-from core.business.interface.ibucket import IBucket
+from website.core.business.interface.ibucket import IBucket
 
 
 class IBucketUseCase(metaclass=abc.ABCMeta):
@@ -27,5 +27,5 @@ class IBucketUseCase(metaclass=abc.ABCMeta):
         ...
 
     @abc.abstractmethod
-    def update_bucket(self, uuid: UUID) -> None:
+    def update_bucket(self, bucket: IBucket) -> None:
         ...
