@@ -2,6 +2,7 @@ import os
 
 import boto3
 from django.shortcuts import render
+from django.views import View
 
 from .core.business.use_cases.aws.aws_access_acl import AwsAccessAcl
 from .core.business.use_cases.aws.scrapping_aws import ScrappingAws
@@ -34,6 +35,14 @@ from .core.business.use_cases.aws.scrapping_aws import ScrappingAws
 def home(request):
     template_name = "website/index.html"
     return render(request, template_name, {"navbar": "home"})
+
+
+class RepositoryView(View):
+    template_name = "website/repository_scan.html"
+
+    def get(self, request, *args, **kwargs):
+        context = {"navbar": "repository"}
+        return render(request, self.template_name, context)
 
 
 def scan(request):

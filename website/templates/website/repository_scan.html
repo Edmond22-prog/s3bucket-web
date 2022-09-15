@@ -1,0 +1,32 @@
+{% extends 'website/base.html' %}
+
+{% block title %}
+    Ninja Sphere - Repository Scanner
+{% endblock %}
+
+{% block content %}
+    <br><br><br>
+    <p class="h1 text-center">Github Repository Scanner</p>
+    <br>
+    <form method="POST" action={% url 'scan' %}>
+        {% csrf_token %}
+        <div class="mb-5 mx-5">
+            <input id="input1" type="text" name="object" class="form-control form-control-lg"
+                   placeholder="https://github.com/username/repository_name"
+                   style="width: 50%; margin: 0 auto;" required>
+            {% if message %}
+                <p class="text-center" style="color: red">
+                    {{ message }}
+                </p>
+            {% endif %}
+        </div>
+        <div class="d-grid gap-2 col-2 mx-auto">
+            <button id="scrap_btn" type="submit" class="btn btn-outline-primary btn-lg">Scan Repository</button>
+            <button id="loading_btn" class="btn btn-primary" type="button" disabled style="display: none;">
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Wait a moment please...
+            </button>
+        </div>
+    </form>
+
+{% endblock %}

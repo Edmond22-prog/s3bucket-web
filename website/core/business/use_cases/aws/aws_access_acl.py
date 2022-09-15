@@ -12,8 +12,8 @@ import environ
 from botocore.client import BaseClient
 from botocore.exceptions import ClientError
 
-from core.business.entities import AwsBucketEntity
-from core.business.exceptions import PermissionException, TypeException
+from ....business.entities import AwsBucketEntity
+from ....business.exceptions import PermissionException, TypeException
 
 REGIONS_NAME = [
     "us-east-2",
@@ -83,7 +83,7 @@ class AwsAccessAcl(object):
 
     def _check_read_acl_permissions(self, bucket: AwsBucketEntity) -> Optional[dict]:
         s3_client = self._aws_client
-        acl_permission_response = {"permission": PermissionException.ACCESS_DENIED, "acl_property": None}
+        acl_permission_response = {}
 
         if self._check_head_bucket(bucket):
             try:
