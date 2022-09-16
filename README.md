@@ -20,7 +20,7 @@
     pip install -r requirements.txt
 ```
 
-### 4. Create an .env file in the directory framework/core/business/use_cases/aws/ which will contain the following information that you will need to provide.
+### 4. Create an .env file in the directory website/core/business/use_cases/aws/ which will contain the following information that you will need to provide.
 
 ```
     AWS_ACCESS_KEY_ID=<YOUR_AWS_ACCESS_KEY_ID>
@@ -28,7 +28,13 @@
     AWS_DEFAULT_REGION=<YOUR_AWS_DEFAULT_REGION>
 ```
 
-### 5. Run the application in the framework/ directory.
+### 5. Create another .env file in the directory website/core/business/use_cases/github/ which will contain the following information that you will need to provide.
+
+```
+    GITHUB_TOKEN=<YOUR_GITHUB_TOKEN>
+```
+
+### 6. Run the server.
 
 ```
     python manage.py runserver
