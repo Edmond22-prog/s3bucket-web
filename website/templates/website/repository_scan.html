@@ -7,12 +7,12 @@
 {% block content %}
     <br><br><br>
     <p class="h1 text-center">Github Repository Scanner</p>
-    <br>
-    <form method="POST" action={% url 'scan' %}>
+    <br><br>
+    <form method="POST">
         {% csrf_token %}
         <div class="mb-5 mx-5">
-            <input id="input1" type="text" name="object" class="form-control form-control-lg"
-                   placeholder="https://github.com/username/repository_name"
+            <input id="input1" type="text" name="repository_name" class="form-control form-control-lg"
+                   placeholder="username/repository or the github repository URL"
                    style="width: 50%; margin: 0 auto;" required>
             {% if message %}
                 <p class="text-center" style="color: red">

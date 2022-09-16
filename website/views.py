@@ -4,6 +4,7 @@ import boto3
 from django.shortcuts import render
 from django.views import View
 
+from .core.business.use_cases.github.repository_scanner import RepositoryScanner
 from .core.business.use_cases.aws.aws_access_acl import AwsAccessAcl
 from .core.business.use_cases.aws.scrapping_aws import ScrappingAws
 
@@ -38,11 +39,24 @@ def home(request):
 
 
 class RepositoryView(View):
-    template_name = "website/repository_scan.html"
+    template_get = "website/repository_scan.html"
+    template_post = "website/scan_result.html"
 
     def get(self, request, *args, **kwargs):
         context = {"navbar": "repository"}
-        return render(request, self.template_name, context)
+        return render(request, self.template_get, context)
+
+    def post(self, request, *args, **kwargs):
+        context = {"navbar": "scan"}
+        repository = request.POST["repository_name"]
+        result = RepositoryScanner(repository).run()
+        if result is None:
+            context = {"message": "Repository not found."}
+            return render(request, self.template_get, context)
+
+        context["repository"] = result
+        context["vulnerabilities_count"] = len(result.vulnerabilities)
+        return render(request, self.template_post, context)
 
 
 def scan(request):
