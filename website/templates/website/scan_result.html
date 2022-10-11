@@ -1,7 +1,7 @@
 {% extends 'website/base.html' %}
 
 {% block title %}
-    S3 Bucket Finder - Scan Result
+    Ninja Sphere - Scan Result
 {% endblock %}
 
 {% block content %}
@@ -71,9 +71,9 @@
             </tbody>
         </table>
 
-    {% else %}
+    {% elif result %}
         <br>
-        <table class="table caption-top table-hover">
+        <table class="table caption-top">
             <caption>Result scan of <span>{{ result.name }}</span></caption>
             <thead class="table-dark">
             <tr>
@@ -122,6 +122,65 @@
             </tr>
             </tbody>
         </table>
+
+    {% else %}
+        <br>
+        <p class="h2 text-center">Repository < {{ repository.name }} > scan result</p>
+        <br>
+        <p class="h3 text-start ms-5">Repository Informations</p>
+        <br>
+        <div class="table-responsive mx-5">
+            <table class="table table-bordered border-dark">
+                <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Owner</th>
+                    <th scope="col">Url</th>
+                    <th scope="col">Creation Date</th>
+                    <th scope="col">Last Update Date</th>
+                    <th scope="col">Language(s)</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{{ repository.name }}</td>
+                    <td>{{ repository.owner }}</td>
+                    <td><a target="_blank" href={{ repository.url }}>{{ repository.url }}</a></td>
+                    <td>{{ repository.created_at }}</td>
+                    <td>{{ repository.updated_at }}</td>
+                    <td>
+                        {% for lang, value in repository.languages.items %}
+                            <p>{{ lang }} -> {{ value }}</p>
+
+                        {% endfor %}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <p class="h3 text-start ms-5">Repository Vulnerabilities</p>
+        <br>
+        {% if vulnerabilities_count == 0 %}
+            <p class="text-start ms-5">No vulnerabilities found.</p>
+
+        {% else %}
+            <p class="text-start ms-5">Found <span
+                    class=" fw-bold text-danger">{{ vulnerabilities_count }} vulnerabilities</span>.</p>
+            <br>
+            {% for vulnerability in repository.vulnerabilities %}
+                <div class="card mx-5">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ vulnerability.name }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ vulnerability.location }}</h6>
+                        <span class="text-danger">At line {{ vulnerability.code_line }}</span>
+                        <p class="card-text">{{ vulnerability.code_vulnerability }}</p>
+                    </div>
+                </div>
+                <br>
+            {% endfor %}
+
+        {% endif %}
 
     {% endif %}
 {% endblock %}

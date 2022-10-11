@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>
         {% block title %}
-            S3 Bucket Finder
+            Ninja Sphere
         {% endblock %}
     </title>
     <link rel="stylesheet" href={% static 'website/css/bootstrap.css' %}>
@@ -23,12 +23,15 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mx-5 me-auto mb-2 mb-lg-0 nav nav-pills">
                 <li class="nav-item">
-                    <a class="nav-link text-light {% if navbar == "home" %} active {% endif %}" href={% url 'home' %}>Home</a>
+                    <a class="nav-link text-light {% if navbar == "home" %} active {% endif %}" href={% url 'home' %}>Buckets Scanner</a>
                 </li>
                 {#                <li class="nav-item">#}
                 {#                    <a class="nav-link text-light {% if navbar == "saved_buckets" %} active {% endif %}"#}
                 {#                       href={% url 'saved_buckets' %}>Saved Buckets</a>#}
                 {#                </li>#}
+                <li class="nav-item">
+                    <a class="nav-link text-light {% if navbar == "repository" %} active {% endif %}" href={% url 'repository' %}>Repository Scanner</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link text-muted {% if navbar == "scan" %} active {% endif %} disabled">Scrapping
                         Result</a>

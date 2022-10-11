@@ -3,7 +3,7 @@ from typing import List
 
 from uuid import UUID
 
-from core.business.interface.ibucket import IBucket
+from website.core.business.interface.ibucket import IBucket
 
 
 class IBucketRepository(metaclass=abc.ABCMeta):
@@ -28,5 +28,5 @@ class IBucketRepository(metaclass=abc.ABCMeta):
         ...
 
     @abc.abstractmethod
-    def update(self, name: UUID) -> None:
+    def update(self, bucket: IBucket) -> None:
         ...

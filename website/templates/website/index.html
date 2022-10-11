@@ -1,5 +1,9 @@
 {% extends 'website/base.html' %}
 
+{% block title %}
+    Ninja Sphere - S3 Bucket Finder
+{% endblock %}
+
 {% block content %}
     <br>
     <p class="h1 text-center">S3 Bucket Finder</p>
@@ -17,7 +21,7 @@
             {% endif %}
         </div>
         <div class="d-grid gap-2 col-2 mx-auto">
-            <button id="scrap_btn" type="submit" class="btn btn-outline-primary btn-lg">Scrap</button>
+            <button id="scrap_btn" type="submit" class="btn btn-outline-primary btn-lg">Scan Bucket</button>
             <button id="loading_btn" class="btn btn-primary" type="button" disabled style="display: none;">
                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                 Wait a moment please...
@@ -45,7 +49,7 @@
             {% endif %}
         </div>
         <div class="d-grid gap-2 col-2 mx-auto">
-            <button id="scrap_file_btn" type="submit" class="btn btn-outline-primary btn-lg">Scrap File</button>
+            <button id="scrap_file_btn" type="submit" class="btn btn-outline-primary btn-lg">Scan Buckets File</button>
             <button id="loading_file_btn" class="btn btn-primary" type="button" disabled style="display: none;">
                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                 Wait a moment please...

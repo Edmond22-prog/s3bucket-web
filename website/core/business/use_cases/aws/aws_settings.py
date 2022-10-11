@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 from typing import Optional, Any, Tuple
 
-from core.business.interface.isettings import ISettings
+from website.core.business.interface.isettings import ISettings
 
 
 class AwsSettings(ISettings):

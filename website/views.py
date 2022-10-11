@@ -2,9 +2,11 @@ import os
 
 import boto3
 from django.shortcuts import render
+from django.views import View
 
-from core.business.use_cases.aws.aws_access_acl import AwsAccessAcl
-from core.business.use_cases.aws.scrapping_aws import ScrappingAws
+from .core.business.use_cases.github.repository_scanner import RepositoryScanner
+from .core.business.use_cases.aws.aws_access_acl import AwsAccessAcl
+from .core.business.use_cases.aws.scrapping_aws import ScrappingAws
 
 
 # class HomeView(View):
@@ -34,6 +36,27 @@ from core.business.use_cases.aws.scrapping_aws import ScrappingAws
 def home(request):
     template_name = "website/index.html"
     return render(request, template_name, {"navbar": "home"})
+
+
+class RepositoryView(View):
+    template_get = "website/repository_scan.html"
+    template_post = "website/scan_result.html"
+
+    def get(self, request, *args, **kwargs):
+        context = {"navbar": "repository"}
+        return render(request, self.template_get, context)
+
+    def post(self, request, *args, **kwargs):
+        context = {"navbar": "scan"}
+        repository = request.POST["repository_name"]
+        result = RepositoryScanner(repository).run()
+        if result is None:
+            context = {"message": "Repository not found."}
+            return render(request, self.template_get, context)
+
+        context["repository"] = result
+        context["vulnerabilities_count"] = len(result.vulnerabilities)
+        return render(request, self.template_post, context)
 
 
 def scan(request):
@@ -78,7 +101,7 @@ def scan_file(request):
         if os.stat(file_name).st_size == 0:
             context = {"message_for_file": "The file is empty."}
             os.remove(file_name)
-            os.chdir(os.path.join(os.getcwd(), "../.."))
+            os.chdir(os.path.join(os.getcwd(), ".."))
             return render(request, "website/index.html", context)
 
         buckets = []
@@ -100,7 +123,7 @@ def scan_file(request):
         # Delete the local file
         if os.path.exists(file_name):
             os.remove(file_name)
-            os.chdir(os.path.join(os.getcwd(), "../.."))
+            os.chdir(os.path.join(os.getcwd(), ".."))
 
         context["buckets"] = buckets
         context["file_name"] = file_name
